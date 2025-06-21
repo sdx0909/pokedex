@@ -1,0 +1,84 @@
+Project Name: Pokedex : 
+---------------------
+
+we are integrating the api : https://pokeapi.co/
+
+1: downloading the list of pokemons at initial start.
+ url : https://pokeapi.co/api/v2/pokemon
+
+2: useEffect has 3 cases for rendering the callback:
+---------------------------
+    2.2 useEffect with empty array []:
+    ----------------------------------
+    -> if you specifies the empty array after callback function then the useEffect will executes the callback function at only once(intial-component-rendering)
+
+    2.2 useEffect with no array:
+    ---------------------------
+    -> if we do not use any array then it will always executes the callback fuction whenever we rendering the component.
+    (NOTE: rendering the component in the sense we are changing the variables of component) 
+
+    2.3 useEffect with array-elment:
+    -------------------------------
+    -> if we specifies the variable/s in the array then it will executes the callback function on the basis of variable/s changes. means if the variables changes then callback executes if and only if variables are specified in the array only.
+
+3: downloading data from api:
+-----------------------------
+    3.1: fetchAPI
+    3.2: axios(recommended)
+    -> installing the axios:
+        npm install axios
+
+
+4: React-Router-Dom:
+---------------------
+
+-> used to handeling the routes.
+-> installing the react-router-dom:
+    command : npm i react-router-dom
+
+-> inside the 'main.jsx' >
+-> import the 'BrowserRouter' from 'react-router-dom' module.
+-> wrap the <App /> into <BrowserRouter /> as like
+    <BrowserRouter>
+        <App />
+    </BrowserRouter>
+
+-> this can enable React Router in whole <App>.
+
+
+5: configure the route:
+-----------------------
+-> creating the 'routes' folder.
+-> creating the <CustomRoutes> component in that handles the routes to appropriate component.
+-> for setting the routes with corresponding component we need Routes,Route from 'react-router-dom'.
+-> here,
+    'path'    : specifies the url-path 
+    'element' : specifies the component which we invoke after go to respective path. 
+
+
+-> for example:
+---------------
+<Routes>
+    <Route path="/" element={<Pokedex />}></Route>
+    <Route path="/pokemon/:id" element={<PokemonDetails />}></Route>
+</Routes>
+
+
+5: <Link to=""> component:
+--------------------------
+-> this component provided by 'react-router-dom'.
+-> alternative for <a></a> anchor tag, but difference is that <Link to=""> component not reload the page. 
+-> anchor tag has drawback of reloading the entire application when click on it.
+-> in 'Pokemon.jsx' file instead of using 
+    <a href={`/pokemon/${id}`}></a>
+-> we use :
+    <Link to={`/pokemon/${id}`}></Link>
+
+
+
+6: useParams() Hook:
+--------------------
+-> useParams() Hook used to fetch the params from current url path.provided by 'react-router-dom' module.
+-> it return an object of 'key:value' of the dynamic params from the current url that where matche by '<Route path={} element={}>' 
+-> here for example:
+    const { id } = useParams();
