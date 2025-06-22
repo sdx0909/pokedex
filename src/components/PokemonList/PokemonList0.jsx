@@ -1,32 +1,63 @@
+// *** here this code is old code that is optimized in Object:
+// -----------------------------------------------------------
+
 import { useEffect, useState } from "react";
 import "./PokemonList.css";
 import axios from "axios"; // for fetching the json data from url
 import Pokemon from "../Pokemon/Pokemon";
 
 function PokemonList0() {
-  const [pokemonList, setPokemonList] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  // todo : new
-  const [pokedexUrl, setPokedexUrl] = useState(
-    "https://pokeapi.co/api/v2/pokemon"
-  );
-  const [nextUrl, setNextUrl] = useState("");
-  const [prevUrl, setPrevUrl] = useState("");
+  // todo: advanced state-management
+  // instead of creating the multiple states we have to create a single state.
+  // that has multiple states in object.
+
+  // todo: v2
+  const [pokemonListState, setPokemonListState] = useState({
+    pokemonList: [],
+    isLoading: true,
+    pokedexUrl: "https://pokeapi.co/api/v2/pokemon",
+    nextUrl: "",
+    prevUrl: "",
+  });
+
+  // *** const [pokemonList, setPokemonList] = useState([]);
+  // *** const [isLoading, setIsLoading] = useState(true);
+
+  // todo: creating the state of url for multiple time changing for new pokemons
+  // *** const [pokedexUrl, setPokedexUrl] = useState(
+  // ***  "https://pokeapi.co/api/v2/pokemon"
+  // *** );
+  // *** const [nextUrl, setNextUrl] = useState("");
+  // *** const [prevUrl, setPrevUrl] = useState("");
 
   async function downloadPokemons() {
-    setIsLoading(true);
-    const response = await axios.get(pokedexUrl); // DOWNLOAD 20 POKEMONS
+    // todo: v2
+    setPokemonListState({ ...pokemonListState, isLoading: true });
+    // ***  setIsLoading(true);
+
+    // todo: v2
+    const response = await axios.get(pokemonListState.pokedexUrl);
+    // DOWNLOAD 20 POKEMONS
+    // *** const response = await axios.get(pokedexUrl);
+
     // console.log(`response >`);
     // console.log(response);
 
     // todo : setting the prevUrl and nextUrl
-    setPrevUrl(response.data.previous);
-    setNextUrl(response.data.next);
+    // todo : advanced-state management
+    // todo: v2
+    setPokemonListState((state) => ({
+      ...state,
+      nextUrl: response.data.next,
+      prevUrl: response.data.previous,
+    }));
+    // *** setPrevUrl(response.data.previous);
+    // *** setNextUrl(response.data.next);
 
     const pokemonResults = response.data.results;
     // WE GET THE ARRAY OF POKEMONS FROM 'RESULTS' PROPERTY
     // console.log("pokemonResults");
-    // console.log(pokemonResults);
+    console.log(`pokemonResults >`, pokemonResults);
 
     // ITERATING OVER THE ARRAY OF POKEMONS,AND USING THEIR URLS TO CREATE AN ARRAY OF PROMISES
     // THAT WILL DOWNLOAD THOSE 20 POKEOMONS
@@ -45,7 +76,7 @@ function PokemonList0() {
 
     // NOW ITERATING THE ABOVE 20 POKEMONS (DETAILED)DATA
     // AND EXTRACT ID,NAME,IMAGE_URL,TYPE FROM IT.
-    const res = pokemonData.map((pokeData) => {
+    const pokeListResult = pokemonData.map((pokeData) => {
       const pokemon = pokeData.data;
       // console.log(pokemon);
       return {
@@ -55,38 +86,55 @@ function PokemonList0() {
         types: pokemon.types,
       };
     });
-    // console.log("res >");
-    // console.log(res);
+    // console.log("pokeListResult >");
+    // console.log(pokeListResult);
 
     // save the data of 20 pokemons in array of "pokemonList"
-    setPokemonList(res);
+    // todo: v2
+    // todo-ref: https://react.dev/learn/queueing-a-series-of-state-updates
+    setPokemonListState((state) => ({
+      ...state,
+      pokemonList: pokeListResult,
+      isLoading: false,
+    }));
 
-    setIsLoading(false);
+    // *** setPokemonList(pokeListResult);
+    // *** setIsLoading(false);
   }
 
   useEffect(() => {
     downloadPokemons();
-  }, [pokedexUrl]);
+  }, [pokemonListState.pokedexUrl]);
+  // *** }, [pokedexUrl]);
 
   return (
     <div className="pokemon-list-wrapper">
       <div className="pokemon-wrapper">
-        {isLoading
+        {pokemonListState.isLoading
           ? "Loading..."
-          : pokemonList.map((p) => (
+          : pokemonListState.pokemonList.map((p) => (
               <Pokemon name={p.name} image={p.image} key={p.id} id={p.id} />
             ))}
       </div>
       <div className="controls">
         <button
-          disabled={prevUrl === null}
-          onClick={() => setPokedexUrl(prevUrl)}
+          disabled={pokemonListState.prevUrl === null}
+          // *** onClick={setPokedexUrl(prevUrl)}
+          // todo: v2
+          onClick={() => {
+            const urlToSet = pokemonListState.prevUrl;
+            setPokemonListState({ ...pokemonListState, pokedexUrl: urlToSet });
+          }}
         >
           Prev
         </button>
         <button
-          disabled={nextUrl === null}
-          onClick={() => setPokedexUrl(nextUrl)}
+          disabled={pokemonListState.buttonnextUrl === null}
+          // *** onClick={setPokedexUrl(prevUrl)}
+          onClick={() => {
+            const urlToSet = pokemonListState.nextUrl;
+            setPokemonListState({ ...pokemonListState, pokedexUrl: urlToSet });
+          }}
         >
           Next
         </button>
