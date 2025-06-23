@@ -1,6 +1,5 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import usePokemonList from "./usePokemonList";
 
 function usePokemonDetails(id, pokemonName) {
   const [pokemon, setPokemon] = useState({});
@@ -48,7 +47,7 @@ function usePokemonDetails(id, pokemonName) {
     }
   }
 
-  const [pokemonListState, setPokemonListState] = usePokemonList();
+  const [pokemonListState, setPokemonListState] = useState({});
 
   useEffect(() => {
     downloadPokemon();

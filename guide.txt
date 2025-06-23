@@ -82,3 +82,16 @@ we are integrating the api : https://pokeapi.co/
 -> it return an object of 'key:value' of the dynamic params from the current url that where matche by '<Route path={} element={}>' 
 -> here for example:
     const { id } = useParams();
+
+
+7: custom-hooks:
+----------------
+-> created on the base of inbuilt-hooks.
+-> here this can help in optimizing the code readability.
+-> in this application we created the 'hooks' folder.
+-> in that folder I created 'usePokemonList' and 'usePokemonDetails' custome hooks.
+
+8: Debouncing in React:
+-----------------------
+-> if we are getting response from axios get requests for every keystroke then the server will fires the multiple requests that causes the time and unnecessary efforts of axios server.
+-> for that Debouncing is introduced.
