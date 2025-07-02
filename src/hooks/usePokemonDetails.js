@@ -1,5 +1,6 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 
 function usePokemonDetails(id, pokemonName) {
   const [pokemon, setPokemon] = useState({});
@@ -20,6 +21,8 @@ function usePokemonDetails(id, pokemonName) {
           response.data.types ? response.data.types[0].type.name : ""
         }`
       );
+
+      toast.success("Founded !!!");
 
       setPokemon((state) => ({
         ...state,
@@ -43,6 +46,7 @@ function usePokemonDetails(id, pokemonName) {
         type: response.data.types ? response.data.types[0].type.name : "",
       });
     } catch (e) {
+      toast.error("Not Found!");
       console.log("something went wrong:", e.message);
     }
   }
